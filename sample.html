@@ -3,16 +3,33 @@
 <head>
 <body>
 <frameset>
-<h2>The iframe element</h2>
-
-<frame id="one" border=1>
+	<h2>The iframe element</h2>
+	<h3>this is h3</h3>
+<frame name="one" border=1>
+<!DOCTYPE html>
 <html>
 <body>
 
-<input type=text id="userid" />
+<h1>JavaScript Dates</h1>
+<h2>Using new Date()</h2>
+
+<p id="demo"></p>
+
+<script>
+function displayDateTime() {
+
+const d = new Date();
+ 
+document.getElementById("demo").innerHTML =  d.toLocaleString();
+}
+// Display immediately
+        displayDateTime();
+
+        // Update every second
+        setInterval(displayDateTime, 1000);
+</script>
+
 </body>
-
-
 </html>
 </frame>
 
