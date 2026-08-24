@@ -1,31 +1,56 @@
 <!DOCTYPE html>
+<!-- Version2 of greet.html with geolocation mocking for testing input -->
 <html>
+
 <body>
-<div id="greet"></div>
+    <div id="greet"></div>
 
-<script>
+    <script>
 
-var Digital=new Date()
-var hours=Digital.getHours()
-var minutes=Digital.getMinutes()
+        var Digital = new Date()
+        var hours = Digital.getHours()
+        var minutes = Digital.getMinutes()
 
 
-document.write ('time is now:' + hours)
+        document.write('time is now:' + hours)
 
-//Configure message below to your own.
-if (hours>=5&&hours<=11) //MESSAGE FOR MORNING
-document.getElementById('greet').innerHTML="Good morning"
-else if (hours==12) //MESSAGE FOR NOON
-document.getElementById('greet').innerHTML="Noon greetings"
-else if (hours>=13&&hours<=17) //MESSAGE FOR AFTERNOON
-document.getElementById('greet').innerHTML="Good afternoon"
-else if (hours>=18&&hours<=20) //MESSAGE FOR EVENING (6pm-8pm)
-document.getElementById('greet').innerHTML="Good evening"
-else if (hours>=21&&hours<=23) //MESSAGE FOR NIGHT (9pm-11pm)
-document.getElementById('greet').innerHTML="Good night"
-else //MESSAGE FOR LATE NIGHT, EARLY MORNING (12am-4am)
-document.getElementById('greet').innerHTML="Good late night"
+        //Configure message below to your own.
+        if (hours >= 5 && hours <= 11) //MESSAGE FOR MORNING
+            document.getElementById('greet').innerHTML = "Good morning"
+        else if (hours == 12) //MESSAGE FOR NOON
+            document.getElementById('greet').innerHTML = "Noon greetings"
+        else if (hours >= 13 && hours <= 17) //MESSAGE FOR AFTERNOON
+            document.getElementById('greet').innerHTML = "Good afternoon"
+        else if (hours >= 18 && hours <= 20) //MESSAGE FOR EVENING (6pm-8pm)
+            document.getElementById('greet').innerHTML = "Good evening"
+        else if (hours >= 21 && hours <= 23) //MESSAGE FOR NIGHT (9pm-11pm)
+            document.getElementById('greet').innerHTML = "Good night"
+        else //MESSAGE FOR LATE NIGHT, EARLY MORNING (12am-4am)
+            document.getElementById('greet').innerHTML = "Good late night"
 
-</script>
+    </script>
 </body>
+
 </html>
+
+<!--
+
+1. Mock geolocation in Chrome DevTools
+Open your website in Chrome.
+Press F12 → open DevTools.
+Press Ctrl + Shift + P to open the Command Menu.
+Type Sensors.
+Select Show Sensors.
+In the Sensors panel, find Location.
+Select a predefined location, such as:
+Mumbai
+London
+Tokyo
+Or choose Other... and enter your own latitude/longitude.
+
+For example:
+
+Latitude: 19.0760
+Longitude: 72.8777
+
+-->
