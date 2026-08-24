@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<body>
+<p id="demo"></p>
+
+
+<script>
+function displayText() {
+
+ 
+document.getElementById("demo").innerHTML =  "New text";
+}
+
+function displayLinks() {
+    let links = document.querySelectorAll('a');
+    let linkTexts = [];
+    links.forEach(link => {
+        linkTexts.push(link.innerText);
+    });
+    document.getElementById("demo").innerHTML = linkTexts.join("<br>");
+
+document.querySelectorAll('a').forEach(link => {
+    //console.log(link.innerText);
+    validatelink(link.href);
+
+
+});
+}
+function validatelink(url) {
+    let pattern = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+)\.([a-zA-Z]{2,})(\/[^\s]*)?$/;
+    if (pattern.test(url)) {
+        document.getElementById("demo").innerHTML += url + " is a valid URL<br>";
+    }
+        else {
+        
+            document.getElementById("demo").innerHTML += url + " is not a valid URL<br>";
+        }  
+}
+</script>
+
+<table>
+<tr><td><input type=button onClick=displayLinks()>Click to display links</input></td> </tr>
+<tr> <td>   <a href = "ftp://www.example.com">Example Link</a></td>
+</tr>
+<tr> <td>   <a href = "https://www.google.com">Google</a></td>
+</tr>
+<tr> <td>   <a href = "abcd://www.invalidurl.com">invalidurl Link</a></td>
+</tr>
+
+</table>
+</body>
+
+
+</html>
+
+
+
