@@ -1,0 +1,40 @@
+<html>
+<title>Total validating hands on</title>
+
+<body>
+
+    <h1>150.00</h1>
+
+    <button  onclick="validateTotal()">Validate Total</button>
+
+
+    <script>
+
+        function validateTotal() {
+
+        let actualgrandtotal = document.querySelector("h1").textContent;
+
+        let expectedgrandtotal=150.00;
+
+        actualgrandtotal = Number(actualgrandtotal);
+
+        let tax=10;
+        if (actualgrandtotal === expectedgrandtotal) {
+            actualgrandtotal = actualgrandtotal + tax;
+
+            alert("Grand total is correct. adding tax to it " + actualgrandtotal);
+
+            
+        } else {
+            alert("Grand total is not correct");
+
+        }
+
+    } 
+
+        </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <input type=number id="age" min=18 max=65 placeholder="Enter your age" onkeydown="return  false;">
+
+    <button id="va" onclick="validateAge()">Validate Age</button>
+
+    <p id="message"></p>
+<script>
+        function validateAge() {
+            let msg=document.getElementById("message"); 
+            msg.textContent = "You clicked the button";
+        if (document.getElementById("age").value ==="") {
+		    msg.style.color="red";
+		    msg.textContent = "Age cannot be empty";
+		    return;
+	    }
+        let age = Number(document.getElementById("age").value);
+	    
+		
+
+            if (age >= 18 && age <= 65) {
+                msg.style.color="green";
+		msg.textContent = document.getElementById("age").value +
+                    " is Valid age. Applicant is eligible for insurance.";
+		     
+            } else {
+                msg.style.color="red";
+			msg.textContent =document.getElementById("age").value +
+                    " is Invalid age. Applicant is not eligible for insurance. Valid range is 18-65";
+		
+            }
+
+        
+        
+        }
+</script>
+
+</body>
+
+
+</html>
