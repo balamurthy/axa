@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InsureCraft Sandbox - Test Automation Learning Portal</title>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-hover: #1d4ed8;
+            --success: #10b981;
+            --error: #ef4444;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --border: #cbd5e1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15);
+        }
+
+        .radio-group, .checkbox-group {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .radio-item, .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .riders-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .file-dropzone {
+            border: 2px dashed var(--border);
+            padding: 1.5rem;
+            text-align: center;
+            border-radius: 6px;
+            cursor: pointer;
+            background: #f1f5f9;
+            transition: background 0.3s;
+        }
+
+        .file-dropzone:hover {
+            background: #e2e8f0;
+        }
+
+        .file-dropzone input[type="file"] {
+            display: none;
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .form-group.has-error input,
+        .form-group.has-error select,
+        .form-group.has-error .file-dropzone {
+            border-color: var(--error);
+            background-color: #fef2f2;
+        }
+
+        .form-group.has-error .error-message {
+            display: block;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        button {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button[type="submit"] {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        button[type="submit"]:hover {
+            background-color: var(--primary-hover);
+        }
+
+        button[type="button"] {
+            background-color: #e2e8f0;
+            color: #475569;
+        }
+
+        button[type="button"]:hover {
+            background-color: #cbd5e1;
+        }
+
+        #resultContainer {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            display: none;
+        }
+
+        #resultContainer h3 {
+            color: #166534;
+            margin-bottom: 0.75rem;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .result-value {
+            font-weight: bold;
+            color: #14532d;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>InsureCraft Sandbox</h1>
+    <p class="subtitle">Insurance Premium Calculator Test Playground</p>
+
+    <form id="insuranceForm" novalidate>
+        <!-- Full Name (Text Field with Regex) -->
+        <div class="form-group" id="group-fullName">
+            <label for="fullName">Full Name *</label>
+            <input type="text" id="fullName" name="fullName" placeholder="e.g. Rahul Sharma">
+            <div class="error-message" id="err-fullName">Please enter a valid full name (letters and spaces only, min 3 chars).</div>
+        </div>
+
+        <!-- Date of Birth (Date Picker for Age Validation) -->
+        <div class="form-group" id="group-dob">
+            <label for="dob">Date of Birth *</label>
+            <input type="date" id="dob" name="dob">
+            <div class="error-message" id="err-dob">Applicant must be between 18 and 65 years old.</div>
+        </div>
+
+        <!-- Gender (Radio Buttons) -->
+        <div class="form-group" id="group-gender">
+            <label>Gender *</label>
+            <div class="radio-group">
+                <label class="radio-item"><input type="radio" name="gender" value="Male" id="genderMale"> Male</label>
+                <label class="radio-item"><input type="radio" name="gender" value="Female" id="genderFemale"> Female</label>
+                <label class="radio-item"><input type="radio" name="gender" value="Other" id="genderOther"> Other</label>
+            </div>
+            <div class="error-message" id="err-gender">Please select your gender.</div>
+        </div>
+
+        <!-- Smoking History (Dropdown Select) -->
+        <div class="form-group" id="group-smoking">
+            <label for="smoking">Smoking History *</label>
+            <select id="smoking" name="smoking">
+                <option value="">-- Select Option --</option>
+                <option value="Non-Smoker">Non-Smoker</option>
+                <option value="Smoker">Smoker</option>
+            </select>
+            <div class="error-message" id="err-smoking">Please select a tobacco usage status.</div>
+        </div>
+
+        <!-- Sum Assured (Numeric Input with Min/Max) -->
+        <div class="form-group" id="group-sumAssured">
+            <label for="sumAssured">Sum Assured (₹) *</label>
+            <input type="number" id="sumAssured" name="sumAssured" placeholder="Min 500,000 - Max 50,00,00,000">
+            <div class="error-message" id="err-sumAssured">Value must be between ₹5,000,000 and ₹500,000,000.</div>
+        </div>
+
+        <!-- Policy Term (Dropdown Select) -->
+        <div class="form-group" id="group-term">
+            <label for="policyTerm">Policy Term *</label>
+            <select id="policyTerm" name="policyTerm">
+                <option value="">-- Select Duration --</option>
+                <option value="10">10 Years</option>
+                <option value="15">15 Years</option>
+                <option value="20">20 Years</option>
+                <option value="30">30 Years</option>
+            </select>
+            <div class="error-message" id="err-term">Please select a coverage duration.</div>
+        </div>
+
+        <!-- Optional Riders (Checkboxes - Trap triggered if more than 2 selected) -->
+        <div class="form-group" id="group-riders">
+            <label>Optional Coverage Riders (Max 2 allowed) *</label>
+            <div class="riders-grid">
+                <label class="checkbox-item"><input type="checkbox" name="riders" value="Accidental Death" class="rider-cb"> Accidental Death Benefit</label>
+                <label class="checkbox-item"><input type="checkbox" name="riders" value="Critical Illness" class="rider-cb"> Critical Illness Cover</label>
+                <label class="checkbox-item"><input type="checkbox" name="riders" value="Waiver of Premium" class="rider-cb"> Waiver of Premium</label>
+                <label class="checkbox-item"><input type="checkbox" name="riders" value="Accidental Disability" class="rider-cb"> Permanent Disability</label>
+            </div>
+            <div class="error-message" id="err-riders">You cannot select more than 2 additional riders.</div>
+        </div>
+
+        <!-- KYC Upload Dropzone (File Input Manipulation) -->
+        <div class="form-group" id="group-kyc">
+            <label>Upload KYC Identification (PAN / Aadhaar) *</label>
+            <div class="file-dropzone" id="dropzone" onclick="document.getElementById('kycFile').click()">
+                <span id="dropzoneText">Click or Drag & Drop File Here (.pdf, .jpg, .png)</span>
+                <input type="file" id="kycFile" name="kycFile" accept=".pdf,.png,.jpg,.jpeg">
+            </div>
+            <div class="error-message" id="err-kyc">Please attach a valid identification document.</div>
+        </div>
+
+        <!-- Terms and Conditions Checkbox (Boolean Constraint) -->
+        <div class="form-group" id="group-tc">
+            <div class="checkbox-group">
+                <label class="checkbox-item">
+                    <input type="checkbox" id="tcCheck" name="tcCheck"> I accept the declaration terms and conditions *
+                </label>
+            </div>
+            <div class="error-message" id="err-tc">You must agree to the declarations to proceed.</div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="actions">
+            <button type="button" id="clearBtn">Clear Form</button>
+            <button type="submit" id="calculateBtn">Calculate Premium</button>
+        </div>
+    </form>
+
+    <!-- Async Dynamic Output Container -->
+    <div id="resultContainer">
+        <h3>Calculation Summary</h3>
+        <div class="result-row">
+            <span>Insured Entity:</span>
+            <span class="result-value" id="res-name">-</span>
+        </div>
+        <div class="result-row">
+            <span>Calculated Age:</span>
+            <span class="result-value" id="res-age">-</span>
+        </div>
+        <div class="result-row">
+            <span>Risk Matrix:</span>
+            <span class="result-value" id="res-risk">-</span>
+        </div>
+        <div class="result-row">
+            <span>Estimated Annual Premium:</span>
+            <span class="result-value" id="res-premium" style="color: #16a34a; font-size: 1.2rem;">-</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('insuranceForm');
+    const fileInput = document.getElementById('kycFile');
+    const dropzoneText = document.getElementById('dropzoneText');
+    const clearBtn = document.getElementById('clearBtn');
+    const resultContainer = document.getElementById('resultContainer');
+
+    // Handle File upload display name update
+    fileInput.addEventListener('change', (e) => {
+        if(e.target.files.length > 0) {
+            dropzoneText.textContent = `Attached: ${e.target.files[0].name}`;
+            document.getElementById('group-kyc').classList.remove('has-error');
+        } else {
+            dropzoneText.textContent = "Click or Drag & Drop File Here (.pdf, .jpg, .png)";
+        }
+    });
+
+    // Clear Form logic
+    clearBtn.addEventListener('click', () => {
+        form.reset();
+        dropzoneText.textContent = "Click or Drag & Drop File Here (.pdf, .jpg, .png)";
+        resultContainer.style.display = 'none';
+        document.querySelectorAll('.form-group').forEach(el => el.classList.remove('has-error'));
+    });
+
+    // Validation and Calculation Submissions
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        let hasError = false;
+
+        // Reset errors
+        document.querySelectorAll('.form-group').forEach(el => el.classList.remove('has-error'));
+
+        // 1. Name Validation
+        const fullName = document.getElementById('fullName').value.trim();
+        if(!/^[a-zA-Z\s]{3,50}$/.test(fullName)) {
+            document.getElementById('group-fullName').classList.add('has-error');
+            console.log("AXA Name validation failed for input: ", fullName);
+            hasError = true;
+        }
+        else {  console.log("Name format is correct !", fullName);
+            
+        }
+
+        // 2. DOB / Age Validation (18-65)
+        const dobVal = document.getElementById('dob').value;
+        let calculatedAge = 0;
+        if(!dobVal) {
+            document.getElementById('group-dob').classList.add('has-error');
+            hasError = true;
+        } else {
+            const birthDate = new Date(dobVal);
+            const today = new Date();
+            calculatedAge = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                calculatedAge--;
+            }
+            if(calculatedAge < 18 || calculatedAge > 65) {
+                document.getElementById('group-dob').classList.add('has-error');
+                hasError = true;
+            }
+        }
+
+        // 3. Gender Validation
+        const genderActive = document.querySelector('input[name="gender"]:checked');
+        if(!genderActive) {
+            document.getElementById('group-gender').classList.add('has-error');
+            hasError = true;
+        }
+
+        // 4. Smoking Dropdown Validation
+        const smoking = document.getElementById('smoking').value;
+        if(!smoking) {
+            document.getElementById('group-smoking').classList.add('has-error');
+            hasError = true;
+        }
+
+        // 5. Sum Assured Validation
+        const sumAssured = parseFloat(document.getElementById('sumAssured').value);
+        if(isNaN(sumAssured) || sumAssured < 500000 || sumAssured > 500000000) {
+            document.getElementById('group-sumAssured').classList.add('has-error');
+            hasError = true;
+        }
+
+        // 6. Policy Term Validation
+        const term = document.getElementById('policyTerm').value;
+        if(!term) {
+            document.getElementById('group-term').classList.add('has-error');
+            hasError = true;
+        }
+
+        // 7. Riders Validation (Max 2)
+        const selectedRiders = document.querySelectorAll('.rider-cb:checked');
+        if(selectedRiders.length > 2) {
+            document.getElementById('group-riders').classList.add('has-error');
+            hasError = true;
+        }
+
+        // 8. KYC File Attachment Check
+        if(fileInput.files.length === 0) {
+            document.getElementById('group-kyc').classList.add('has-error');
+            hasError = true;
+        }
+
+        // 9. T&C Checkbox Check
+        const tcChecked = document.getElementById('tcCheck').checked;
+        if(!tcChecked) {
+            document.getElementById('group-tc').classList.add('has-error');
+            hasError = true;
+        }
+
+        if(hasError) {
+            resultContainer.style.display = 'none';
+            return;
+        }
+
+        // Mock Dynamic Premium Calculation Formula
+        let baseRate = smoking === 'Smoker' ? 0.0025 : 0.0012;
+        if(calculatedAge > 40) baseRate += 0.0008;
+        
+        let finalPremium = sumAssured * baseRate;
+        finalPremium += (selectedRiders.length * 1200); // Add flat rider costs
+
+        // Inject data into DOM simulation
+        document.getElementById('res-name').textContent = fullName;
+        document.getElementById('res-age').textContent = `${calculatedAge} Years`;
+        document.getElementById('res-risk').textContent = `${smoking} / ${selectedRiders.length} Riders`;
+        document.getElementById('res-premium').textContent = `₹${Math.round(finalPremium).toLocaleString('en-IN')}`;
+
+        // Show Container with simulated asynchronous delay feel
+        resultContainer.style.display = 'block';
+        resultContainer.scrollIntoView({ behavior: 'smooth' });
+    });
+</script>
+</body>
+</html>
