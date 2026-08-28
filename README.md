@@ -8,3 +8,8 @@ https://sampleapp.tricentis.com/101/app.php
 
 //If you  are unable to run typescript in powershell, try
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+
+//Notepad utility even accesssible from within vms
+https://notepad.pw/balamurthyAXA
+
+
