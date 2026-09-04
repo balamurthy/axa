@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insurance Testing Sandbox</title>
+<style>
+body{font-family:Arial,sans-serif;margin:0;background:#f4f6f8;color:#222}
+header{background:#163a5f;color:#fff;padding:18px 28px}
+header h1{margin:0;font-size:24px}
+nav{background:#fff;padding:10px 20px;border-bottom:1px solid #ddd}
+nav button{margin:4px;padding:9px 14px;border:1px solid #bbb;background:#f8f8f8;cursor:pointer;border-radius:4px}
+nav button:hover{background:#e8eef5}
+main{max-width:1050px;margin:25px auto;padding:0 18px}
+.card{background:#fff;padding:22px;margin-bottom:20px;border-radius:7px;box-shadow:0 1px 5px #ccc}
+h2{color:#163a5f}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+label{font-weight:bold;display:block;margin-bottom:5px}
+input,select,textarea{width:100%;box-sizing:border-box;padding:9px;border:1px solid #aaa;border-radius:4px}
+textarea{min-height:90px}
+button.primary{background:#163a5f;color:#fff;border:0;padding:11px 18px;border-radius:4px;cursor:pointer}
+button.danger{background:#a52222;color:white;border:0;padding:11px 18px;border-radius:4px}
+.error{color:#a52222;font-size:14px;margin-top:4px}
+.success{color:#176b32;font-weight:bold}
+.hidden{display:none}
+.result{background:#eef5fb;border-left:5px solid #163a5f;padding:15px;margin-top:18px}
+table{border-collapse:collapse;width:100%}
+td,th{border:1px solid #ccc;padding:9px;text-align:left}
+.badge{display:inline-block;padding:5px 9px;border-radius:12px;background:#ddd}
+.badge.high{background:#f6c4c4}.badge.medium{background:#f7dfaa}.badge.low{background:#c9e8ce}
+</style>
+</head>
+<body>
+<header>
+<h1>Insurance Testing Sandbox</h1>
+<div>Risk-Based Test Automation Practice Application</div>
+</header>
+
+<nav>
+<button onclick="showPage('customer')">1. Customer</button>
+<button onclick="showPage('quote')">2. Quote</button>
+<button onclick="showPage('payment')">3. Payment</button>
+<button onclick="showPage('policy')">4. Policy</button>
+<button onclick="showPage('claim')">5. Claims</button>
+<button onclick="showPage('search')">6. Search</button>
+</nav>
+
+<main>
+
+<section id="customer" class="page card">
+<h2>Customer Registration</h2>
+<div class="grid">
+<div><label for="firstName">First Name *</label><input id="firstName"></div>
+<div><label for="lastName">Last Name *</label><input id="lastName"></div>
+<div><label for="dob">Date of Birth *</label><input id="dob" type="date"></div>
+<div><label for="email">Email *</label><input id="email" type="email"></div>
+<div><label for="phone">Phone *</label><input id="phone" placeholder="+1 (416) 555-0189"></div>
+<div><label for="address">Address *</label><input id="address"></div>
+</div>
+<p id="customerError" class="error"></p>
+<button type="button" class="primary" onclick="registerCustomer()">Register Customer</button>
+<p id="customerSuccess" class="success"></p>
+</section>
+
+<section id="quote" class="page card hidden">
+<h2>Insurance Quote</h2>
+<div class="grid">
+<div><label for="insuranceType">Insurance Type *</label>
+<select id="insuranceType"><option value="">Select</option><option>Auto</option><option>Home</option><option>Life</option></select></div>
+<div><label for="age">Age *</label><input id="age" type="number" min="0"></div>
+<div><label for="vehicleValue">Asset / Vehicle Value *</label><input id="vehicleValue" type="number" min="0"></div>
+<div><label for="claims">Claims in Last 3 Years *</label><input id="claims" type="number" min="0"></div>
+<div><label for="locationRisk">Location Risk *</label>
+<select id="locationRisk"><option value="">Select</option><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select></div>
+<div><label for="deductible">Deductible *</label>
+<select id="deductible"><option value="500">500</option><option value="1000">1000</option><option value="2000">2000</option></select></div>
+</div>
+<p><strong>Optional Coverage</strong></p>
+<label><input id="collision" type="checkbox" style="width:auto"> Collision (+$200)</label>
+<label><input id="comprehensive" type="checkbox" style="width:auto"> Comprehensive (+$300)</label>
+<label><input id="roadside" type="checkbox" style="width:auto"> Roadside Assistance (+$100)</label>
+<p id="quoteError" class="error"></p>
+<button class="primary" onclick="calculateQuote()">Calculate Premium</button>
+<div id="quoteResult" class="result hidden"></div>
+</section>
+
+<section id="payment" class="page card hidden">
+<h2>Payment</h2>
+<p>Use any card except numbers ending in <strong>0000</strong> to simulate successful payment.</p>
+<div class="grid">
+<div><label for="cardName">Name on Card *</label><input id="cardName"></div>
+<div><label for="cardNumber">Card Number *</label><input id="cardNumber" placeholder="4111111111111111"></div>
+<div><label for="expiry">Expiry (MM/YY) *</label><input id="expiry" placeholder="12/30"></div>
+<div><label for="cvv">CVV *</label><input id="cvv" maxlength="3"></div>
+</div>
+<p id="paymentError" class="error"></p>
+<button class="primary" onclick="makePayment()">Pay Now</button>
+<div id="paymentResult" class="result hidden"></div>
+</section>
+
+<section id="policy" class="page card hidden">
+<h2>Policy Management</h2>
+<div id="policyDetails">
+<p>No policy has been issued yet.</p>
+</div>
+<hr>
+<h3>Policy Modification</h3>
+<div class="grid">
+<div><label for="newCoverage">Coverage Change</label>
+<select id="newCoverage"><option value="none">No change</option><option value="basic">Basic</option><option value="premium">Premium</option></select></div>
+<div><label for="endorsementAmount">Endorsement Amount</label><input id="endorsementAmount" type="number" value="0" min="0"></div>
+</div>
+<p id="policyError" class="error"></p>
+<button class="primary" onclick="modifyPolicy()">Save Endorsement</button>
+<button class="danger" onclick="cancelPolicy()">Cancel Policy</button>
+<div id="policyMessage"></div>
+</section>
+
+<section id="claim" class="page card hidden">
+<h2>Submit Insurance Claim</h2>
+<div class="grid">
+<div><label for="claimPolicy">Policy Number *</label><input id="claimPolicy"></div>
+<div><label for="lossDate">Date of Loss *</label><input id="lossDate" type="date"></div>
+<div><label for="claimType">Claim Type *</label>
+<select id="claimType"><option value="">Select</option><option>Accident</option><option>Theft</option><option>Property Damage</option></select></div>
+<div><label for="claimAmount">Claim Amount *</label><input id="claimAmount" type="number" min="0"></div>
+</div>
+<label for="claimDescription">Description *</label>
+<textarea id="claimDescription"></textarea>
+<p id="claimError" class="error"></p>
+<button class="primary" onclick="submitClaim()">Submit Claim</button>
+<div id="claimResult" class="result hidden"></div>
+</section>
+
+<section id="search" class="page card hidden">
+<h2>Policy Search</h2>
+<label for="searchPolicy">Policy Number</label>
+<input id="searchPolicy" placeholder="POL10001">
+<br><br>
+<button type="button" class="primary" onclick="findPolicy()">Search</button>
+<div id="searchResult" class="result hidden"></div>
+</section>
+
+</main>
+
+<script>
+let customer = null;
+let quote = null;
+let policy = null;
+let claim = null;
+let nextPolicy = 10001;
+let nextQuote = 20001;
+let nextClaim = 30001;
+
+function showPage(id){
+ document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
+ document.getElementById(id).classList.remove('hidden');
+}
+
+function registerCustomer(){
+ const firstNameEl=document.getElementById('firstName');
+ const lastNameEl=document.getElementById('lastName');
+ const dobEl=document.getElementById('dob');
+ const emailEl=document.getElementById('email');
+ const phoneEl=document.getElementById('phone');
+ const addressEl=document.getElementById('address');
+ const errorEl=document.getElementById('customerError');
+ const successEl=document.getElementById('customerSuccess');
+
+ const first=firstNameEl.value.trim();
+ const last=lastNameEl.value.trim();
+ const dobValue=dobEl.value;
+ const emailValue=emailEl.value.trim();
+ const phoneValue=phoneEl.value.trim();
+ const addressValue=addressEl.value.trim();
+
+ errorEl.textContent='';
+ successEl.textContent='';
+
+ if(!first||!last||!dobValue||!emailValue||!phoneValue||!addressValue){
+   errorEl.textContent='All mandatory fields are required.'; return;
+ }
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)){
+   errorEl.textContent='Enter a valid email address.'; return;
+ }
+ if(!/^\+?\d[\d\s()\-]{7,18}$/.test(phoneValue)){
+   errorEl.textContent='Enter a valid phone number.'; return;
+ }
+ const birth=new Date(dobValue), today=new Date();
+ if(Number.isNaN(birth.getTime())){
+   errorEl.textContent='Enter a valid date of birth.'; return;
+ }
+ if(birth>today){
+   errorEl.textContent='Date of birth cannot be in the future.'; return;
+ }
+ let age=today.getFullYear()-birth.getFullYear();
+ const m=today.getMonth()-birth.getMonth();
+ if(m<0||(m===0&&today.getDate()<birth.getDate())) age--;
+ if(age<18){
+   errorEl.textContent='Customer must be at least 18 years old.'; return;
+ }
+ customer={first,last,email:emailValue,phone:phoneValue,address:addressValue,age};
+ successEl.textContent='Customer registered successfully.';
+}
+
+function calculateQuote(){
+ quoteError.textContent=''; quoteResult.classList.add('hidden');
+ const type=insuranceType.value, a=Number(age.value), value=Number(vehicleValue.value), c=Number(claims.value), loc=locationRisk.value;
+ if(!type||!a||!value||claims.value===''||!loc){quoteError.textContent='All quote fields are required.';return;}
+ if(a<18){quoteError.textContent='Applicant must be at least 18.';return;}
+ if(a>85){quoteError.textContent='Applicant age exceeds underwriting limit of 85.';return;}
+ if(value<=0){quoteError.textContent='Asset value must be greater than zero.';return;}
+ let risk='Low', surcharge=0;
+ if(c>=3||loc==='high'||a<25){risk='High';surcharge=500;}
+ else if(c>=1||loc==='medium'||a>=65){risk='Medium';surcharge=200;}
+ let base=1000;
+ let optional=(collision.checked?200:0)+(comprehensive.checked?300:0)+(roadside.checked?100:0);
+ let discount=(c===0?100:0);
+ let subtotal=base+surcharge+optional-discount;
+ let tax=Math.round(subtotal*0.13*100)/100;
+ let total=Math.round((subtotal+tax)*100)/100;
+ quote={number:'Q'+nextQuote++,type,risk,base,surcharge,optional,discount,tax,total,coverage:(collision.checked?'Collision ':'')+(comprehensive.checked?'Comprehensive ':'')+(roadside.checked?'Roadside':'')||'Basic',assetValue:value};
+ quoteResult.innerHTML='<strong>Quote Number:</strong> '+quote.number+
+ '<br><strong>Risk Category:</strong> <span class="badge '+risk.toLowerCase()+'">'+risk+'</span>'+
+ '<br><strong>Base Premium:</strong> $'+base.toFixed(2)+
+ '<br><strong>Risk Surcharge:</strong> $'+surcharge.toFixed(2)+
+ '<br><strong>Optional Coverage:</strong> $'+optional.toFixed(2)+
+ '<br><strong>No-Claims Discount:</strong> -$'+discount.toFixed(2)+
+ '<br><strong>Tax (13%):</strong> $'+tax.toFixed(2)+
+ '<br><strong>Final Premium:</strong> $'+total.toFixed(2)+
+ '<br><br><button class="primary" onclick="acceptQuote()">Accept Quote</button>';
+ quoteResult.classList.remove('hidden');
+}
+
+function acceptQuote(){
+ if(!quote)return;
+ showPage('payment');
+}
+
+function makePayment(){
+ paymentError.textContent=''; paymentResult.classList.add('hidden');
+ if(!cardName.value.trim()||!cardNumber.value.trim()||!expiry.value.trim()||!cvv.value.trim()){
+   paymentError.textContent='All payment fields are required.';return;
+ }
+ if(!/^\d{16}$/.test(cardNumber.value.replace(/\\s/g,''))){
+   paymentError.textContent='Card number must contain 16 digits.';return;
+ }
+ if(cardNumber.value.replace(/\\s/g,'').endsWith('0000')){
+   paymentError.textContent='Payment declined by simulated payment gateway.';return;
+ }
+ if(!/^\d{2}\/\d{2}$/.test(expiry.value)||!/^\d{3}$/.test(cvv.value)){
+   paymentError.textContent='Invalid expiry or CVV format.';return;
+ }
+ policy={number:'POL'+nextPolicy++,status:'ACTIVE',premium:quote.total,coverage:quote.coverage,effective:new Date().toISOString().slice(0,10),expiry:'2027-09-03'};
+ paymentResult.innerHTML='<span class="success">Payment successful.</span><br>Transaction ID: TX'+Date.now()+
+ '<br>Policy '+policy.number+' has been issued.';
+ paymentResult.classList.remove('hidden');
+ renderPolicy();
+ showPage('policy');
+}
+
+function renderPolicy(){
+ if(!policy){policyDetails.innerHTML='<p>No policy has been issued yet.</p>';return;}
+ policyDetails.innerHTML='<table><tr><th>Policy Number</th><td>'+policy.number+'</td></tr>'+
+ '<tr><th>Status</th><td>'+policy.status+'</td></tr>'+
+ '<tr><th>Coverage</th><td>'+policy.coverage+'</td></tr>'+
+ '<tr><th>Premium</th><td>$'+Number(policy.premium).toFixed(2)+'</td></tr>'+
+ '<tr><th>Effective Date</th><td>'+policy.effective+'</td></tr>'+
+ '<tr><th>Expiry Date</th><td>'+policy.expiry+'</td></tr></table>';
+}
+
+function modifyPolicy(){
+ policyError.textContent=''; policyMessage.innerHTML='';
+ if(!policy||policy.status!=='ACTIVE'){policyError.textContent='Only active policies can be modified.';return;}
+ const amount=Number(endorsementAmount.value);
+ if(amount<0){policyError.textContent='Endorsement amount cannot be negative.';return;}
+ if(newCoverage.value!=='none') policy.coverage=newCoverage.value==='premium'?'Premium':'Basic';
+ policy.premium=Math.round((Number(policy.premium)+amount)*100)/100;
+ policyMessage.innerHTML='<p class="success">Endorsement saved successfully. New premium: $'+policy.premium.toFixed(2)+'</p>';
+ renderPolicy();
+}
+
+function cancelPolicy(){
+ policyError.textContent=''; policyMessage.innerHTML='';
+ if(!policy){policyError.textContent='No policy exists.';return;}
+ if(policy.status==='CANCELLED'){policyError.textContent='Policy is already cancelled.';return;}
+ const refund=Math.round(policy.premium*0.80*100)/100;
+ policy.status='CANCELLED';
+ policyMessage.innerHTML='<p class="success">Policy cancelled. Simulated refund: $'+refund.toFixed(2)+'</p>';
+ renderPolicy();
+}
+
+function submitClaim(){
+ claimError.textContent=''; claimResult.classList.add('hidden');
+ if(!claimPolicy.value.trim()||!lossDate.value||!claimType.value||!claimAmount.value||!claimDescription.value.trim()){
+  claimError.textContent='All claim fields are required.';return;
+ }
+ if(!policy||claimPolicy.value.trim()!==policy.number){claimError.textContent='Policy not found.';return;}
+ if(policy.status!=='ACTIVE'){claimError.textContent='Claims can only be submitted against active policies.';return;}
+ const amount=Number(claimAmount.value);
+ const max=policy.premium*5;
+ if(amount>max){claimError.textContent='Claim amount exceeds simulated coverage limit of $'+max.toFixed(2)+'.';return;}
+ claim={number:'CLM'+nextClaim++,status:'SUBMITTED',amount};
+ claimResult.innerHTML='<span class="success">Claim submitted successfully.</span><br>Claim Number: '+claim.number+
+ '<br>Status: '+claim.status;
+ claimResult.classList.remove('hidden');
+}
+
+function findPolicy(){
+ const policyNumber=document.getElementById('searchPolicy').value.trim();
+ const result=document.getElementById('searchResult');
+ result.classList.remove('hidden');
+ if(policy&&policyNumber===policy.number){
+   result.innerHTML='<strong>Policy Found</strong><br>Policy Number: '+policy.number+
+   '<br>Status: '+policy.status+'<br>Premium: $'+policy.premium.toFixed(2);
+ }else{
+   result.innerHTML='<strong>No policy found.</strong>';
+ }
+}
+
+showPage('customer');
+</script>
+</body>
+</html>
