@@ -1,0 +1,10 @@
+Day 13 - Requirement
+
+In sandbox insurance Register customer page
+Create the following ui tests . 
+
+test('Check position of Register customer button @ui', async ({ page }) => {
+test ('Check the style @ui of the Register customer button ', async ({ page }) => {
+test ('Check if the label for First Name input box @ui is First Name *', async ({ page }) => {
+test('Check background colour of the Register customer @ui button to be dark blue ', async ({ page }) => {
+
