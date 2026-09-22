@@ -29,6 +29,6 @@ steps:
 - task: PublishPipelineArtifact@1
   condition: always()
   inputs:
-    targetPath: '$(Build.SourcesDirectory)\Typescript\playwright-report'
+    targetPath: '$(Build.SourcesDirectory)\playwright-report'
     artifact: 'playwright-report'
   displayName: 'Publish Playwright Report'
