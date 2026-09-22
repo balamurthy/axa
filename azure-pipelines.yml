@@ -2,33 +2,73 @@ trigger:
 - main
 
 pool:
-  name: 'YourSelfHostedPool'
+  vmImage: 'windows-latest'
+
+variables:
+  projectFolder: '$(Build.SourcesDirectory)'
 
 steps:
 
+# --------------------------------------------------
+# 1. Install Node.js
+# --------------------------------------------------
 - task: NodeTool@0
+  displayName: 'Install Node.js'
   inputs:
     versionSpec: '20.x'
-  displayName: 'Install Node.js'
 
-- script: |
-    cd "$(Build.SourcesDirectory)"
+
+# --------------------------------------------------
+# 2. Verify source folder
+# --------------------------------------------------
+- powershell: |
+    Write-Host "Build Sources Directory:"
+    Write-Host "$(Build.SourcesDirectory)"
+
+    Write-Host ""
+    Write-Host "Project Folder:"
+    Write-Host "$(projectFolder)"
+
+    Write-Host ""
+    Write-Host "Project contents:"
+    Get-ChildItem "$(projectFolder)"
+  displayName: 'Verify Project Folder'
+
+
+# --------------------------------------------------
+# 3. Install npm dependencies
+# --------------------------------------------------
+- powershell: |
+    Set-Location "$(projectFolder)"
     npm ci
-  displayName: 'npm install'
+  displayName: 'Install npm dependencies'
 
-- script: |
-    cd "$(Build.SourcesDirectory)\tests\sanitytests"
+
+# --------------------------------------------------
+# 4. Install Playwright Chromium
+# --------------------------------------------------
+- powershell: |
+    Set-Location "$(projectFolder)"
     npx playwright install chromium
   displayName: 'Install Playwright Chromium'
 
-- script: |
-    cd "$(Build.SourcesDirectory)"
-    npx playwright test
-  displayName: 'Run Playwright tests'
 
+# --------------------------------------------------
+# 5. Run Playwright tests
+# --------------------------------------------------
+- powershell: |
+    Set-Location "$(projectFolder)"
+    npx playwright test
+  displayName: 'Run Playwright Tests'
+
+
+# --------------------------------------------------
+# 6. Publish Playwright HTML Report
+# --------------------------------------------------
 - task: PublishPipelineArtifact@1
+  displayName: 'Publish Playwright HTML Report'
   condition: always()
   inputs:
-    targetPath: '$(Build.SourcesDirectory)\playwright-report'
+    targetPath: '$(projectFolder)\playwright-report'
     artifact: 'playwright-report'
-  displayName: 'Publish Playwright Report'
+    publishLocation: 'pipeline'
