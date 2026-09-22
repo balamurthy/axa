@@ -12,17 +12,17 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    cd "$(Build.SourcesDirectory)\Typescript"
+    cd "$(Build.SourcesDirectory)"
     npm ci
   displayName: 'npm install'
 
 - script: |
-    cd "$(Build.SourcesDirectory)\Typescript"
+    cd "$(Build.SourcesDirectory)\tests\sanitytests"
     npx playwright install chromium
   displayName: 'Install Playwright Chromium'
 
 - script: |
-    cd "$(Build.SourcesDirectory)\Typescript"
+    cd "$(Build.SourcesDirectory)"
     npx playwright test
   displayName: 'Run Playwright tests'
 
